@@ -1,29 +1,14 @@
-# pCnt = int(input())
-# xyList = []
-# resList = []
+pCnt = int(input())
+xyList = []
+cnt = 0
 
-# for i in range(0, pCnt):
-#   x, y = map(int, input().split())
-#   xyList.append([x, y])
+for i in range(pCnt):
+  x, y = map(int, input().split())
+  xyList.append([x, y])
 
-# xList = sorted(xyList, key = lambda x: -x[0])
-# yList = sorted(xyList, key=lambda x: -x[1])
-
-# for i in range(0, pCnt):
-#   if xList[i][0] == yList[i][0] and xList[i][1] == yList[i][1]:
-#     xList.remove(xList[i])
-#     yList.remove(yList[i])
-#   else:
-
-# pCnt = int(input())
-# xyList = []
-
-# for i in range(pCnt):
-#   x, y = map(int, input().split())
-#   xyList.append([x, y])
-
-# for i in range(pCnt):
-#   xyList[i][0] > xyList[i][] and xyList[i]
-
-# 틀렸음. 다시 해야 함.
-
+for i in range(pCnt):
+  cnt = 1
+  for j in range(pCnt):
+    if xyList[i][0] < xyList[j][0] and xyList[i][1] < xyList[j][1]: # 자기자신보다 x와 y 둘 다 크다면 자기자신의 등수가 떨어짐. 만약 둘 중 하나만 비교대상이 크다면 같은 등수로 생각함.
+      cnt += 1
+  print(cnt, end=' ')
