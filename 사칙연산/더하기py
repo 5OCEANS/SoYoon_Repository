@@ -1,0 +1,9 @@
+import sys
+
+T = int(sys.stdin.readline().strip())
+
+for i in range(T):
+  N = int(sys.stdin.readline().strip())
+  numList = list(map(int, sys.stdin.readline().strip().split()))
+
+  print(sum(numList))
