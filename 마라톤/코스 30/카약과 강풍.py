@@ -1,25 +1,26 @@
 import sys
 
-def binary_search(array, target, start, end):
-  while start <= end:
-    mid = (start+end)//2
-    if target > array[mid]:
-      print(array[mid], end = ' ')
-      start = mid + 1
-    elif target < array[mid]:
-      print(array[mid], end = ' ')
-      end = mid - 1
+N, S, R = map(int, sys.stdin.readline().strip().split())
+brokenNumList = set(map(int, sys.stdin.readline().strip().split()))
+twoNumList = set(map(int, sys.stdin.readline().strip().split()))
+
+answer = 0
+
+intersection = brokenNumList & twoNumList
+brokenNumList = list(brokenNumList - intersection)
+twoNumList = list(twoNumList - intersection)
+
+if not brokenNumList:
+  answer = 0
+else:
+  brokenNumList.sort()
+
+  for t in brokenNumList:
+    if t-1 in twoNumList:
+      twoNumList.remove(t-1)
+    elif t+1 in twoNumList:
+      twoNumList.remove(t+1)
     else:
-      print(target)
-      return True
+      answer += 1
 
-numList = [i for i in range(1, 51)]
-
-while True:
-  try:
-    num = int(sys.stdin.readline())
-    if num == 0:
-      break
-    binary_search(numList, num, 0, len(numList)-1)
-  except:
-    break
+print(answer)
