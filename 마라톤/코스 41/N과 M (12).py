@@ -15,4 +15,3 @@ def solve(depth, idx):
     ans.pop()
 
 solve(0, 0)
-p = sorted(list(set(p)))
