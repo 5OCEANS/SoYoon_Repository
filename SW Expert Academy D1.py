@@ -642,8 +642,137 @@ numList = [1, 1]
 resultList = [numList.append(numList[i-1]+numList[i]) for i in range(1, 9)]
 print(numList)
 
+
 string = input()
 result = 0
 for num in string:
     result += int(num)
 print(result)
+
+
+numList = [5, 6, 77, 45, 22, 12, 24]
+resultList = [num for num in numList if num % 2 != 0]
+print(resultList)
+
+resultList = [num**2 for num in range(1, 21) if num % 3 != 0 or num % 5 != 0]
+print(resultList)
+
+
+dicBase = (('가','깋'), ('나','닣'), ('다','딯'), ('라','맇'), ('마','밓'),
+           ('바','빟'), ('사','싷'), ('아','잏'), ('자','짛'),
+           ('차','칳'), ('카','킿'), ('타','팋'), ('파','핗'), ('하','힣'))
+
+inputWord = ['막', '부모님', '비용', '비행기', '원래', '처리', '최초', '꼴', '좀',
+             '들다', '싶다', '수출', '계시다', '다', '뒤', '듣다', '함께', '아이',
+             '무척', '보이다', '가지다', '그', '자르다', '데리다', '마리', '개',
+             '정도', '옳다', '놀이', '뜨겁다']
+
+result = [
+    [w for w in inputWord if ord(r[0]) <= ord(w[0]) <= ord(r[1])]
+    for r in dicBase
+]
+
+print(result)
+
+
+string = input()
+backString = string[::-1]
+print(backString)
+if string == backString:
+    print('입력하신 단어는 회문(Palindrome)입니다.')
+else:
+    print('입력하신 단어는 회문(Palindrome)이 아닙니다.')
+
+
+numberDict = {
+    '홍길동': '010-1111-1111',
+    '이순신': '010-1111-2222',
+    '강강찬': '010-1111-3333'
+}
+name = input('''아래 학생들의 전화번호를 조회할 수 있습니다.
+홍길동
+이순신
+강감찬
+전화번호를 조회하고자 하는 학생의 이름을 입력하십시오.''')
+print(name+'의 전화번호는 '+numberDict[name]+'입니다.')
+
+
+numList = list(map(int, input().split(',')))
+numTuple = tuple(numList)
+print(numList)
+print(numTuple)
+
+
+import math
+
+radiusList = list(map(int, input().split(',')))
+circumferenceList = [round(num*2*math.pi, 2) for num in radiusList]
+print(*circumferenceList, sep=', ')
+
+
+row, col = map(int, input().split(','))
+resultList = [[i*j for j in range(col)] for i in range(row)]
+print(resultList)
+
+
+numList1 = [1,3,6,78,35,55]
+numList2 = [12,24,35,24,88,120,155]
+resultList = [num for num in numList1 if num in numList2]
+print(resultList)
+
+
+string = input()
+result = string[0::2]
+print(result)
+
+
+string = input().split(',')
+string = [w.strip() for w in string]
+string.sort()
+print(', '.join(string))
+
+
+numList = list(map(int, input().split(',')))
+numList = [num for num in numList if num % 2 != 0]
+print(', '.join(map(str, numList)))
+
+
+resultList = [[[0 for _ in range(4)] for j in range(3)] for i in range(2)]
+print(resultList)
+
+
+numList = [12, 24, 35, 70, 88, 120, 155]
+resultList = [numList[i] for i in range(len(numList)) if i not in (0, 4, 5)]
+print(resultList)
+
+
+numList = [12, 24, 35, 70, 88, 120, 155]
+resultList = numList[1::2]
+print(resultList)
+
+
+numTuple = (1,2,3,4,5,6,7,8,9,10)
+numTuple1 = numTuple[0:len(numTuple)//2]
+numTuple2 = numTuple[len(numTuple)//2:]
+print(numTuple1)
+print(numTuple2)
+
+
+productDict = { "TV": 2000000, "냉장고": 1500000, "책상": 350000, "노트북": 1200000, "가스레인지": 200000, "세탁기": 1000000}
+sortedProductDict = sorted(productDict.items(), key=lambda x: x[1], reverse=True)
+for key, value in sortedProductDict:
+    print(key + ': ' + str(value))
+
+
+stringList = input().split()
+stringList = stringList[::-1]
+print(*stringList)
+
+
+from collections import defaultdict
+string = input()
+stringDict = defaultdict(int)
+for char in string:
+    stringDict[char] += 1
+for key, value in stringDict.items():
+    print(key + ',' + str(value))
