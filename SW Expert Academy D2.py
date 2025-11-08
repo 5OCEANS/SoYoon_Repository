@@ -36,3 +36,16 @@ for tc in range(1, T + 1):
     print(f"#{tc}")
     for row in board:
         print(' '.join(map(str, row)))
+
+
+# 1204. [S/W 문제해결 기본] 1일차 - 최빈수 구하기
+from collections import defaultdict
+T = int(input())
+for tc in range(1, T + 1):
+    tcNum = input()
+    scoreList = list(map(int, input().split()))
+    scoreDict = defaultdict(int)
+    for score in scoreList:
+        scoreDict[score] += 1
+    manyScore = sorted(scoreDict.items(), key=(lambda x:(x[1], x[0])), reverse=True)
+    print(f'#{tcNum} '+ str(manyScore[0][0]))
