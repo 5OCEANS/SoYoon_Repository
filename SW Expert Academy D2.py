@@ -562,3 +562,140 @@ for tc in range(1, T+1):
             resultNum = i
             resultCount = count
     print(f'#{tc} {resultNum} {resultCount}')
+
+
+# 4836. [파이썬 S/W 문제해결 기본] 2일차 - 색칠하기
+def calculSameArea(redArea, blueArea):
+    resultArea = 0
+    for row in range(10):
+        for col in range(10):
+            if redArea[row][col] == 1 and blueArea[row][col] == 2:
+                resultArea += 1
+    return resultArea
+
+def fillArea(board, area, color):
+    for row in range(area[1], area[3]+1):
+        for col in range(area[0], area[2]+1):
+            board[row][col] = color
+    return board
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    board = [[0]*10 for _ in range(10)]
+    redArea = [[0]*10 for _ in range(10)]
+    blueArea = [[0]*10 for _ in range(10)]
+    for i in range(N):
+        area = list(map(int, input().split()))
+        if area[4] == 1:
+            redArea = fillArea(redArea, area, 1)
+        else:
+            blueArea = fillArea(blueArea, area, 2)
+    resultArea = calculSameArea(redArea, blueArea)
+    print(f'#{tc} {resultArea}')
+
+#   두번째 방식
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    board = [[0]*10 for _ in range(10)]
+    purple = 0
+    for i in range(N):
+        r1, c1, r2, c2, color = map(int, input().split())
+        for row in range(r1, r2+1):
+            for col in range(c1, c2+1):
+                if board[row][col] != 3:
+                    board[row][col] |= color
+                    if board[row][col] == 3:
+                        purple += 1
+    print(f'#{tc} {purple}')
+
+
+# 4839. [파이썬 S/W 문제해결 기본] 2일차 - 이진탐색
+def binarySearch(l, r, key, count):
+    c = int((l+r)/2)
+    if c == key:
+        return count
+    elif c > key:
+        return binarySearch(l, c, key, count+1)
+    else:
+        return binarySearch(c, r, key, count+1)
+
+T = int(input())
+for tc in range(1, T+1):
+    P, A, B = map(int, input().split())
+    aCount = binarySearch(1, P, A, 1)
+    bCount = binarySearch(1, P, B, 1)
+    result = ''
+    if aCount == bCount:
+        result = '0'
+    elif aCount > bCount:
+        result = 'B'
+    else:
+        result = 'A'
+    print(f"#{tc} {result}")
+
+
+# 4869. [파이썬 S/W 문제해결 기본] 4일차 - 종이붙이기
+# 10 - 1
+# 20 - 3
+# 30 - 5
+# 40 - 11
+# 50 - 21
+def calCount(N):
+    if N == 10:
+        return 1
+    elif N == 20:
+        return 3
+    else:
+        return calCount(N-10) + 2*calCount(N-20)
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    result = calCount(N)
+    print(f"#{tc} {result}")
+
+
+# 5185. [파이썬 S/W 문제해결 구현] 1일차 - 이진수
+T = int(input())
+for tc in range(1, T+1):
+    n, string = input().split()
+    resultString = ''
+    for c in string:
+        intC = int(c, 16)
+        resultString += '%04d' % int(bin(intC)[2:])
+    print(f'#{tc} {resultString}')
+
+
+# 4864. [파이썬 S/W 문제해결 기본] 3일차 - 문자열 비교
+T = int(input())
+for tc in range(1, T+1):
+    str1 = input()
+    str2 = input()
+    print(f'#{tc} {1 if str1 in str2 else 0}')
+
+
+# 4861. [파이썬 S/W 문제해결 기본] 3일차 - 회문
+def chkPalindrome(arr, N):
+    for i in range(len(arr)-N+1):
+        if arr[i:i+N] == arr[i:i+N][::-1]:
+            return arr[i:i+N]
+    return ''
+
+T = int(input())
+for tc in range(1, T+1):
+    N, M = map(int, input().split())
+    stringList = [list(input()) for i in range(N)]
+    colrowStringList = list(zip(*stringList))
+    for row in range(N):
+        isStringListPal = chkPalindrome(stringList[row], M)
+        iscolrowStringListPal = chkPalindrome(colrowStringList[row], M)
+        if isStringListPal != '':
+            print(f"#{tc} {''.join(isStringListPal)}")
+            break
+        elif iscolrowStringListPal != '':
+            print(f"#{tc} {''.join(iscolrowStringListPal)}")
+            break
+    else:
+        print('Palindrome이 존재하지 않습니다.')
