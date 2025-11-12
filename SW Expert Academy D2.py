@@ -699,3 +699,198 @@ for tc in range(1, T+1):
             break
     else:
         print('Palindrome이 존재하지 않습니다.')
+
+
+# 4866. [파이썬 S/W 문제해결 기본] 4일차 - 괄호검사
+T = int(input())
+for tc in range(1, T+1):
+    string = input()
+    parenthesesList = []
+    isFail = False
+    for c in string:
+        if c == '{':
+            parenthesesList.append('{')
+        elif c == '}':
+            if len(parenthesesList) != 0 and parenthesesList[-1] == '{':
+                parenthesesList.pop()
+            else:
+                isFail = True
+                break
+        elif c == '(':
+            parenthesesList.append('(')
+        elif c == ')':
+            if len(parenthesesList) != 0 and parenthesesList[-1] == '(':
+                parenthesesList.pop()
+            else:
+                isFail = True
+                break
+    if len(parenthesesList) == 0 and len(parenthesesList) == 0 and not isFail:
+        print(f'#{tc} 1')
+    else:
+        print(f'#{tc} 0')
+
+
+# 4871. [파이썬 S/W 문제해결 기본] 4일차 - 그래프 경로
+def dfs(edgeList, sV, gV, visited):
+    if sV == gV:
+        return True
+    visited[sV] = True
+    for nxt in edgeList[sV]:
+        if not visited[nxt]:
+            if dfs(edgeList, nxt, gV, visited):
+                return True
+    return False
+
+T = int(input())
+for tc in range(1, T+1):
+    V, E = map(int, input().split())
+    edgeList = [[] for _ in range(V+1)]
+    for i in range(E):
+        S, G = map(int, input().split())
+        edgeList[S].append(G)
+    S, G = map(int, input().split())
+    visited = [False] * (V + 1)
+    print(f'#{tc} {1 if dfs(edgeList, S, G, visited) else 0}')
+
+
+# 4881. [파이썬 S/W 문제해결 기본] 5일차 - 배열 최소 합
+def dfs(row, total):
+    global minSum
+
+    if total >= minSum:
+        return
+
+    if row >= N:
+        minSum = min(minSum, total)
+        return
+
+    for col in range(N):
+        if visited[col] == False:
+            visited[col] = True
+            dfs(row+1, total+board[row][col])
+            visited[col] = False
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    minSum = float('inf')
+    visited = [False for _ in range(N)]
+    board = [list(map(int, input().split())) for _ in range(N)]
+    dfs(0,0)
+    print(f'#{tc} {minSum}')
+
+
+# 4865. [파이썬 S/W 문제해결 기본] 3일차 - 글자수
+T = int(input())
+for tc in range(1, T+1):
+    str1 = input()
+    str2 = input()
+    setStr1List = list(set(str1))
+    maxCount = 0
+    for c in setStr1List:
+        count = str2.count(c)
+        maxCount = max(maxCount, count)
+    print(f'#{tc} {maxCount}')
+
+
+# 4874. [파이썬 S/W 문제해결 기본] 5일차 - Forth
+def calculate(operator, num1, num2):
+    if operator == '+':
+        return num1 + num2
+    elif operator == '-':
+        return num1 - num2
+    elif operator == '*':
+        return num1 * num2
+    else:
+        return num1 // num2
+
+T = int(input())
+for tc in range(1, T+1):
+    code =list(input().split())
+    stack = list()
+
+    operDotNum = code.count('+') + code.count('-') + code.count('*') + code.count('/') + code.count('.')
+    intNum = len(code) - operDotNum
+    if operDotNum != intNum:
+        print(f'#{tc} error')
+        continue
+
+    for c in code:
+        if c == '+' or c == '-' or c == '*' or c == '/':
+            num2 = stack.pop()
+            num1 = stack.pop()
+            newNum = calculate(c, num1, num2)
+            stack.append(newNum)
+        elif c == '.':
+            print(f'#{tc} {stack.pop()}')
+        else:
+            stack.append(int(c))
+
+
+# 4873. [파이썬 S/W 문제해결 기본] 4일차 - 반복문자 지우기
+def removedup(row, string):
+    if row >= len(string)-1 or len(string) == 0:
+        return string
+    if string[row] == string[row+1]:
+        string = string[:row] + string[row+2:]
+        return removedup(max(row - 1, 0), string)
+    else:
+        return removedup(row+1, string)
+
+T = int(input())
+for tc in range(1, T+1):
+    string = input()
+    resultString = removedup(0, string)
+    print(f'#{tc} {len(resultString)}')
+
+
+# 5174. [파이썬 S/W 문제해결 기본] 8일차 - subtree
+def findNode(tree, root):
+    if len(tree[root]) <= 0:
+        return 0
+    c = 0
+    for n in tree[root]:
+        c += 1
+        c += findNode(tree, n)
+    return c
+
+T = int(input())
+for tc in range(1, T+1):
+    E, N = map(int, input().split())
+    eList = list(map(int, input().split()))
+    tree = [[] for _ in range(max(eList)+1)]
+    for i in range(0, E*2,2):
+        tree[eList[i]].append(eList[i+1])
+    result = findNode(tree, N) + 1
+    print(f'#{tc} {result}')
+
+
+# 5097. [파이썬 S/W 문제해결 기본] 6일차 - 회전
+T = int(input())
+for tc in range(1, T+1):
+    N, M = map(int, input().split())
+    numList = list(map(int, input().split()))
+    index = M % N
+    print(f'#{tc} {numList[index]}')
+
+
+# 5186. [파이썬 S/W 문제해결 구현] 1일차 - 이진수2
+def dfs(total, string):
+    global goal
+    if total == goal:
+        return string
+    if len(string) >= 13:
+        return 'overflow'
+    num = 2**(-1*(len(string)+1))
+    if (total + num) <= goal:
+        total += num
+        string += '1'
+    else:
+        string += '0'
+    return dfs(total, string)
+
+T = int(input())
+for tc in range(1, T+1):
+    goal = float(input())
+    result = dfs(0.0, '')
+    print(f'#{tc} {result}')
