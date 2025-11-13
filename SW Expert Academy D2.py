@@ -894,3 +894,161 @@ for tc in range(1, T+1):
     goal = float(input())
     result = dfs(0.0, '')
     print(f'#{tc} {result}')
+
+
+# 5102. [파이썬 S/W 문제해결 기본] 6일차 - 노드의 거리
+from collections import deque
+
+T = int(input())
+for tc in range(1, T+1):
+    V, E = map(int, input().split())
+    graph = [[] for _ in range(V+1)]
+    for _ in range(E):
+        a, b = map(int, input().split())
+        graph[a].append(b)
+        graph[b].append(a)
+
+    S, G = map(int, input().split())
+
+    dist = [-1] * (V+1)
+    q = deque([S])
+    dist[S] = 0
+
+    while q:
+        v = q.popleft()
+        if v == G:
+            break
+        for nxt in graph[v]:
+            if dist[nxt] == -1:
+                dist[nxt] = dist[v] + 1
+                q.append(nxt)
+
+    print(f'#{tc} {0 if dist[G] == -1 else dist[G]}')
+
+
+# 21425. +=
+T = int(input())
+for tc in range(1, T+1):
+    A, B, N = map(int, input().split())
+    count = 0
+
+    while A <= N and B <= N:
+        count += 1
+
+        if A > B:
+            A, B = B, A
+
+        A += B
+
+    print(f'{count}')
+
+
+# 4880. [파이썬 S/W 문제해결 기본] 5일차 - 토너먼트 카드게임
+def decideWinner(p1, p2):
+    if p1[1] == p2[1]:
+        return p1 if p1[0] < p2[0] else p2
+    elif not 1 in (p1[1], p2[1]):
+        return p1 if p1[1] == 3 else p2
+    elif not 2 in (p1[1], p2[1]):
+        return p1 if p1[1] == 1 else p2
+    elif not 3 in (p1[1], p2[1]):
+        return p1 if p1[1] == 2 else p2
+
+def oneCycle(peopleList):
+    def solve(l, r):
+        if l == r:
+            return peopleList[l]
+        m = (l+r) // 2
+        left = solve(l, m)
+        right = solve(m+1, r)
+        return decideWinner(left, right)
+    return solve(0, len(peopleList)-1)
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    peopleList = list(map(int, input().split()))
+    peopleIndexList = [(index, peopleList[index]) for index in range(N)]
+
+    winner = oneCycle(peopleIndexList)
+    print(f'#{tc} {winner[0]+1}')
+
+
+# 5176. [파이썬 S/W 문제해결 기본] 8일차 - 이진탐색
+def inorder(node):
+    global num
+    if node <= N:
+        inorder(node*2)
+        tree[node] = num
+        num += 1
+        inorder(node*2+1)
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    tree = [0] * (N+1)
+    num = 1
+    inorder(1)
+    print(f'#{tc} {tree[1]} {tree[N//2]}')
+
+
+# 5177. [파이썬 S/W 문제해결 기본] 8일차 - 이진 힙
+def push(heap, x):
+    heap.append(x)
+    i = len(heap) - 1
+    while i > 1:
+        p = i // 2
+        if heap[i] < heap[p]:
+            heap[i], heap[p] = heap[p], heap[i]
+            i = p
+        else:
+            break
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    nums = list(map(int, input().split()))
+    heap = [0]
+    for x in nums:
+        push(heap, x)
+    idx = N
+    ans = 0
+    while idx > 1:
+        idx //= 2
+        ans += heap[idx]
+    print(f'#{tc} {ans}')
+
+
+# 4875. [파이썬 S/W 문제해결 기본] 5일차 - 미로
+def dfs(r, c):
+    if r < 0 or r >= N or c < 0 or c >= N:
+        return False
+    if board[r][c] == 1 or visited[r][c]:
+        return False
+    if board[r][c] == 3:
+        return True
+
+    visited[r][c] = True
+    for dr, dc in dirs:
+        nr, nc = r + dr, c + dc
+        if dfs(nr, nc):
+            return True
+    return False
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    board = []
+    startRow = 0
+    startCol = 0
+    for row in range(N):
+        numList = list(map(int, input()))
+        if 2 in numList:
+            startRow = row
+            startCol = numList.index(2)
+        board.append(numList)
+    dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    visited = [[False] * N for _ in range(N)]
+
+    ans = 1 if dfs(startRow, startCol) else 0
+    print(f'#{tc} {ans}')
