@@ -177,3 +177,161 @@ for tc in range(1, 11):
     transitionBoard = list(zip(*board))
     countHeight = countPalindromeInBoard(transitionBoard, length)
     print(f'#{tc} {countWeight+countHeight}')
+
+
+# 5215. 햄버거 다이어트
+def dfs(ingrediIdx, totalScore, totalCal):
+    global maxScore
+
+    if totalCal > limitCal:
+        return
+
+    if ingrediIdx == ingrediCount:
+        if maxScore < totalScore:
+            maxScore = totalScore
+        return
+
+    dfs(ingrediIdx+1, totalScore, totalCal)
+    dfs(ingrediIdx+1, totalScore+ingrediList[ingrediIdx][0], totalCal+ingrediList[ingrediIdx][1])
+
+T = int(input())
+for tc in range(1, T+1):
+    ingrediCount, limitCal = map(int, input().split())
+    ingrediList = []
+    for i in range(ingrediCount):
+        score, cal = map(int, input().split())
+        ingrediList.append((score, cal))
+    maxScore = 0
+    dfs(0, 0, 0)
+
+    print(f'#{tc} {maxScore}')
+
+
+# 2806. N-Queen
+def solve_n_queen(N):
+    col = [False] * N
+    diag1 = [False] * (2*N)
+    diag2 = [False] * (2*N)
+    answer = 0
+
+    def dfs(row):
+        nonlocal answer
+        if row == N:
+            answer += 1
+            return
+
+        for c in range(N):
+            if col[c]:
+                continue
+            if diag1[row + c]:
+                continue
+            if diag2[row - c + N - 1]:
+                continue
+
+            col[c] = True
+            diag1[row + c] = True
+            diag2[row - c + N - 1] = True
+
+            dfs(row + 1)
+
+            col[c] = False
+            diag1[row + c] = False
+            diag2[row - c + N - 1] = False
+
+    dfs(0)
+    return answer
+
+T = int(input())
+for tc in range(1, T + 1):
+    N = int(input())
+    result = solve_n_queen(N)
+    print(f"#{tc} {result}")
+
+
+# 1220. [S/W 문제해결 기본] 5일차 - Magnetic
+for tc in range(1, 11):
+    length = int(input())
+    board = [list(map(int, input().split())) for _ in range(length)]
+    visited = [[False] * length for _ in range(length)]
+    result = 0
+    for row in range(length):
+        for col in range(length):
+            if board[row][col] == 0:
+                continue
+            elif board[row][col] == 1:
+                # 아래로 이동해야 함.
+                if row >= length-1:
+                    board[row][col] = 0
+                    continue
+                if not visited[row][col] and board[row+1][col] == 0:
+                    visited[row+1][col] = True
+                    board[row][col], board[row + 1][col] = board[row + 1][col], board[row][col]
+            else:
+                if row <= 0:
+                    board[row][col] = 0
+                    continue
+                # 위로 이동해야 함.
+                if board[row-1][col] == 0:
+                    board[row][col], board[row-1][col] = board[row-1][col], board[row][col]
+        visited = [[False] * length for _ in range(length)]
+    board = list(zip(*board))
+    for line in board:
+        line = ''.join(map(str, line))
+        result += line.count('12')
+    print(f'#{tc} {result}')
+
+
+# 1289. 원재의 메모리 복구하기
+T = int(input())
+for tc in range(1, T+1):
+    string = input()
+    result = 0
+    for idx in range(len(string)):
+        if string.count('1') == 0:
+            break
+        if string[idx] == '0':
+            continue
+        else:
+            string = string[:idx] + string[idx:].replace('0', '3').replace('1', '0').replace('3', '1')
+            result += 1
+    print(f'#{tc} {result}')
+# 다른 방식
+T = int(input())
+for tc in range(1, T+1):
+    s = input().strip()
+    now = '0'
+    cnt = 0
+    for ch in s:
+        if ch != now:
+            cnt += 1
+            now = ch
+    print(f'#{tc} {cnt}')
+
+
+# 1213. [S/W 문제해결 기본] 3일차 - String
+for t in range(10):
+    tc = int(input())
+    keyword = input()
+    string = input()
+    print(f'#{tc} {string.count(keyword)}')
+
+
+# 1216. [S/W 문제해결 기본] 3일차 - 회문2
+def chkPalindrome(board):
+    global maxLength
+    for row in range(100):
+        for col in range(100):
+            for length in range(2, 100):
+                string = board[row][col:col+length]
+                backString = string[::-1]
+                if string == backString:
+                    maxLength = max(maxLength, len(string))
+
+for _ in range(10):
+    tc = int(input())
+    board = [input().strip() for _ in range(100)]
+    maxLength = 1
+    transitionBoard = list(zip(*board))
+    chkPalindrome(board)
+    chkPalindrome(transitionBoard)
+    print(f'#{tc} {maxLength}')
