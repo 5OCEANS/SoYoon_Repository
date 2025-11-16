@@ -335,3 +335,153 @@ for _ in range(10):
     chkPalindrome(board)
     chkPalindrome(transitionBoard)
     print(f'#{tc} {maxLength}')
+
+
+# 1217. [S/W 문제해결 기본] 4일차 - 거듭 제곱
+def multiple(n, m):
+    if m == 1:
+        return n
+    return n * multiple(n, m-1)
+
+for _ in range(10):
+    tc = int(input())
+    N, M = map(int, input().split())
+    result = 1
+    print(f'#{tc} {multiple(N, M)}')
+
+
+# 1873. 상호의 배틀필드
+T = int(input())
+for tc in range(1, T+1):
+    H, W = map(int, input().split())
+    mapList = []
+    dirs = [[0, 1], [-1, 0], [0, -1], [1, 0]]
+    carLoc = [0, 0]
+    carDir = dirs[0]
+    for i in range(H):
+        line = list(input())
+        mapList.append(line)
+        if '^' in line:
+            carLoc = [i, line.index('^')]
+            carDir = dirs[3]
+        elif 'v' in line:
+            carLoc = [i, line.index('v')]
+            carDir = dirs[1]
+        elif '<' in line:
+            carLoc = [i, line.index('<')]
+            carDir = dirs[2]
+        elif '>' in line:
+            carLoc = [i, line.index('>')]
+            carDir = dirs[0]
+    N = int(input())
+    cmdList = list(input())
+    transitionMapList = list(zip(*mapList))
+    for cmd in cmdList:
+        if cmd == 'U':
+            carDir = dirs[3]
+            mapList[carLoc[0]][carLoc[1]] = '^'
+            if carLoc[0]-1 >= 0 and mapList[carLoc[0]-1][carLoc[1]] == '.':
+                mapList[carLoc[0]][carLoc[1]], mapList[carLoc[0]-1][carLoc[1]] = mapList[carLoc[0]-1][carLoc[1]], mapList[carLoc[0]][carLoc[1]]
+                carLoc[0] -= 1
+        elif cmd == 'D':
+            carDir = dirs[1]
+            mapList[carLoc[0]][carLoc[1]] = 'v'
+            if carLoc[0]+1 <= (H-1) and mapList[carLoc[0]+1][carLoc[1]] == '.':
+                mapList[carLoc[0]][carLoc[1]], mapList[carLoc[0]+1][carLoc[1]] = mapList[carLoc[0]+1][carLoc[1]], mapList[carLoc[0]][carLoc[1]]
+                carLoc[0] += 1
+        elif cmd == 'L':
+            carDir = dirs[2]
+            mapList[carLoc[0]][carLoc[1]] = '<'
+            if carLoc[1]-1 >= 0 and mapList[carLoc[0]][carLoc[1]-1] == '.':
+                mapList[carLoc[0]][carLoc[1]], mapList[carLoc[0]][carLoc[1]-1] = mapList[carLoc[0]][carLoc[1]-1], mapList[carLoc[0]][carLoc[1]]
+                carLoc[1] -= 1
+        elif cmd == 'R':
+            carDir = dirs[0]
+            mapList[carLoc[0]][carLoc[1]] = '>'
+            if carLoc[1] + 1 <= (W-1) and mapList[carLoc[0]][carLoc[1] + 1] == '.':
+                mapList[carLoc[0]][carLoc[1]], mapList[carLoc[0]][carLoc[1] + 1] = mapList[carLoc[0]][carLoc[1] + 1], mapList[carLoc[0]][carLoc[1]]
+                carLoc[1] += 1
+        elif cmd == 'S':
+            if carDir == dirs[0]:
+                line = mapList[carLoc[0]]
+                for i in range(carLoc[1]+1, W):
+                    if line[i] == '*':
+                        mapList[carLoc[0]][i] = '.'
+                        break
+                    elif line[i] == '#':
+                        break
+            elif carDir == dirs[1]:
+                line = transitionMapList[carLoc[1]]
+                for i in range(carLoc[0]+1, H):
+                    if line[i] == '*':
+                        mapList[i][carLoc[1]] = '.'
+                        transitionMapList = list(zip(*mapList))
+                        break
+                    elif line[i] == '#':
+                        break
+            elif carDir == dirs[2]:
+                line = mapList[carLoc[0]]
+                for i in range(carLoc[1]-1, -1, -1):
+                    if line[i] == '*':
+                        mapList[carLoc[0]][i] = '.'
+                        break
+                    elif line[i] == '#':
+                        break
+            elif carDir == dirs[3]:
+                line = transitionMapList[carLoc[1]]
+                for i in range(carLoc[0] - 1, -1, -1):
+                    if line[i] == '*':
+                        mapList[i][carLoc[1]] = '.'
+                        transitionMapList = list(zip(*mapList))
+                        break
+                    elif line[i] == '#':
+                        break
+    print(f'#{tc}', end=' ')
+    for idx in range(H):
+        print(''.join(mapList[idx]))
+
+
+# 1228. [S/W 문제해결 기본] 8일차 - 암호문1
+for tc in range(1, 11):
+    N = int(input())
+    originalList = list(input().split())
+    cmdCount = int(input())
+    cmdList = list(input().split())
+    for idx in range(len(cmdList)):
+        count = 0
+        if cmdList[idx] == 'I':
+            loc = int(cmdList[idx+1])
+            if loc >= 10:
+                continue
+            count = int(cmdList[idx+2])
+            numList = cmdList[idx+3:idx+3+count]
+            originalList = originalList[:loc] + numList + originalList[loc:]
+        idx += 2+count
+    print(f'#{tc} ' + ' '.join(originalList[:10]))
+
+
+# 1230. [S/W 문제해결 기본] 8일차 - 암호문3
+for tc in range(1, 11):
+    N = int(input())
+    originalList = list(input().split())
+    cmdCount = int(input())
+    cmdList = list(input().split())
+    for idx in range(len(cmdList)):
+        count = 0
+        if cmdList[idx] == 'I':
+            loc = int(cmdList[idx+1])
+            count = int(cmdList[idx+2])
+            numList = cmdList[idx+3:idx+3+count]
+            originalList = originalList[:loc] + numList + originalList[loc:]
+            idx += 2+count
+        elif cmdList[idx] == 'D':
+            loc = int(cmdList[idx+1])
+            count = int(cmdList[idx+2])
+            originalList = originalList[:loc] + originalList[loc+count:]
+            idx += 2
+        elif cmdList[idx] == 'A':
+            count = int(cmdList[idx+1])
+            numList = cmdList[idx+2:idx+2+count]
+            originalList.extend(numList)
+            idx += 1 + count
+    print(f'#{tc} ' + ' '.join(originalList[:10]))
