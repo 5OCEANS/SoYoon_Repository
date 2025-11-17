@@ -485,3 +485,73 @@ for tc in range(1, 11):
             originalList.extend(numList)
             idx += 1 + count
     print(f'#{tc} ' + ' '.join(originalList[:10]))
+
+
+# 4831. [파이썬 S/W 문제해결 기본] 1일차 - 전기버스
+T = int(input())
+
+for tc in range(1, T + 1):
+    K, N, M = map(int, input().split())
+    chargers = list(map(int, input().split()))
+    chargers.sort()
+
+    pos = 0
+    count = 0
+
+    while pos + K < N:
+        next_pos = pos
+        for c in chargers:
+            if pos < c <= pos + K:
+                next_pos = c
+        if next_pos == pos:
+            count = 0
+            break
+        pos = next_pos
+        count += 1
+
+    print(f"#{tc} {count}")
+
+
+# 4615. 재미있는 오셀로 게임
+def makeInitBoard(N):
+    board = [[0]*N for _ in range(N)]
+    mid = N // 2
+    board[mid-1][mid-1] = 2
+    board[mid-1][mid] = 1
+    board[mid][mid-1] = 1
+    board[mid][mid] = 2
+    return board
+
+def placeStone(r, c, color):
+    board[r][c] = color
+    opp = 2 if color == 1 else 1
+
+    for dr, dc in dirs:
+        nr = r + dr
+        nc = c + dc
+        to_flip = []
+
+        while 0 <= nr < N and 0 <= nc < N and board[nr][nc] == opp:
+            to_flip.append((nr, nc))
+            nr += dr
+            nc += dc
+
+        if 0 <= nr < N and 0 <= nc < N and board[nr][nc] == color:
+            for fr, fc in to_flip:
+                board[fr][fc] = color
+
+T = int(input())
+for tc in range(1, T+1):
+    N, M = map(int, input().split())
+    board = makeInitBoard(N)
+    dirs = [(-1, 0), (1, 0), (0, -1), (0, 1),
+            (-1, -1), (-1, 1), (1, -1), (1, 1)]
+    blackCount = 0
+    whiteCount = 0
+    for _ in range(M):
+        locCol, locRow, color = map(int, input().split())
+        placeStone(locRow-1, locCol-1, color)
+    for i in range(N):
+        blackCount += board[i].count(1)
+        whiteCount += board[i].count(2)
+    print(f'#{tc} {blackCount} {whiteCount}')
