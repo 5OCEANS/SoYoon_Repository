@@ -555,3 +555,330 @@ for tc in range(1, T+1):
         blackCount += board[i].count(1)
         whiteCount += board[i].count(2)
     print(f'#{tc} {blackCount} {whiteCount}')
+
+
+# 1860. 진기의 최고급 붕어빵
+T = int(input())
+for tc in range(1, T+1):
+    N, M, K = map(int, input().split())
+    nList = list(map(int, input().split()))
+    nList.sort(reverse=True)
+    breadCount = 0
+    lastTime = 0
+    isSuccess = True
+
+    for i in range(0, max(nList)+1):
+        if i >= lastTime + M:
+            breadCount += K
+            lastTime += M
+        if nList[-1] == i:
+            nList.pop(-1)
+            if breadCount > 0:
+                breadCount -= 1
+            else:
+                isSuccess = False
+                break
+    print(f'#{tc} ' + ('Possible' if isSuccess else 'Impossible'))
+
+
+# 1234. [S/W 문제해결 기본] 10일차 - 비밀번호
+for tc in range(1, 11):
+    numCount, string = input().split()
+    numCount = int(numCount)
+    i = 0
+
+    while True:
+        if i >= len(string)-1:
+            break
+        if string[i] == string[i+1]:
+            string = string[:i] + string[i+2:]
+            i = (i-1) if i > 0 else 0
+        else:
+            i += 1
+    print(f'#{tc} {string}')
+
+
+# 2814. 최장 경로
+def dfs(idx, totalLength):
+    global maxResult
+    maxResult = max(totalLength, maxResult)
+
+    for i in graph[idx]:
+        if not visited[i]:
+            visited[i] = True
+            dfs(i, totalLength+1)
+            visited[i] = False
+
+T = int(input())
+for tc in range(1, T+1):
+    N, M = map(int, input().split())
+    graph = [[] for _ in range(N+1)]
+    for _ in range(M):
+        x, y = map(int, input().split())
+        graph[x].append(y)
+        graph[y].append(x)
+
+    maxResult = 0
+    for s in range(1, N+1):
+        visited = [False] * (N+1)
+        visited[s] = True
+        dfs(s, 1)
+
+    print(f'#{tc} {maxResult}')
+
+
+# 2817. 부분 수열의 합
+def dfs(idx, totalSum):
+    global result
+    if totalSum == K:
+        result += 1
+        return
+
+    for k in range(idx, N):
+        if not visited[k]:
+            visited[k] = True
+            dfs(k, totalSum+A[k])
+            visited[k] = False
+
+T = int(input())
+for tc in range(1, T+1):
+    N, K = map(int, input().split())
+    A = list(map(int, input().split()))
+    result = 0
+
+    for i in range(N):
+        visited = [False] * (N+1)
+        visited[i] = True
+        dfs(i, A[i])
+    print(f'#{tc} {result}')
+
+
+# 5607. [Professional] 조합
+MOD = 1234567891
+MAX_N = 1000000
+
+fact = [1] * (MAX_N + 1)
+for i in range(1, MAX_N + 1):
+    fact[i] = fact[i - 1] * i % MOD
+
+inv_fact = [1] * (MAX_N + 1)
+inv_fact[MAX_N] = pow(fact[MAX_N], MOD - 2, MOD)
+for i in range(MAX_N, 0, -1):
+    inv_fact[i - 1] = inv_fact[i] * i % MOD
+
+T = int(input().strip())
+for tc in range(1, T + 1):
+    N, R = map(int, input().split())
+
+    if R < 0 or R > N:
+        ans = 0
+    else:
+        ans = fact[N]
+        ans = ans * inv_fact[R] % MOD
+        ans = ans * inv_fact[N - R] % MOD
+
+    print(f"#{tc} {ans}")
+
+
+# 1221. [S/W 문제해결 기본] 5일차 - GNS
+def transNum(string):
+    if string == 'ZRO':
+        return 0
+    elif string == 'ONE':
+        return 1
+    elif string == 'TWO':
+        return 2
+    elif string == 'THR':
+        return 3
+    elif string == 'FOR':
+        return 4
+    elif string == 'FIV':
+        return 5
+    elif string == 'SIX':
+        return 6
+    elif string == 'SVN':
+        return 7
+    elif string == 'EGT':
+        return 8
+    else:
+        return 9
+T = int(input())
+for _ in range(1, T+1):
+    tc, length = input().split()
+    alList = list(input().split())
+    alNumList = list()
+    for al in alList:
+        alNumList.append([al, transNum(al)])
+    alNumList.sort(key=lambda x:(x[1]))
+    print(tc)
+    for i in range(len(alNumList)):
+        print(alNumList[i][0], end=' ')
+
+
+# 6485. 삼성시의 버스 노선
+from collections import defaultdict
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    stationDict = defaultdict(int)
+    for i in range(N):
+        A, B = map(int, input().split())
+        for sta in range(A, B+1):
+            stationDict[sta] += 1
+    P = int(input())
+    result = list()
+    for i in range(P):
+        C = int(input())
+        result.append(stationDict[C])
+    print(f"#{tc} " + ' '.join(map(str, result)))
+
+
+# 11315. 오목 판정
+def makeLine(x, y):
+    if 0 <= x < N and 0 <= y < N:
+        line.append(board[x][y])
+        makeLine(x+1, y+1)
+
+def makeLine2(x, y):
+    if 0 <= x < N and 0 <= y < N:
+        line2.append(board[x][y])
+        makeLine2(x+1, y-1)
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    board = list(input() for _ in range(N))
+    dirs = [(0, 1), (1, 0), (1, 1), (1, -1)]
+    isSuccess = False
+    transitionBoard = list(zip(*board))
+    for idx in range(N):
+        if 'ooooo' in ''.join(board[idx]) or 'ooooo' in ''.join(transitionBoard[idx]):
+            isSuccess = True
+            break
+    if isSuccess:
+        print(f"#{tc} YES")
+        continue
+    for col in range(N):
+        line = list()
+        makeLine(0, col)
+        line2 = list()
+        makeLine2(0, col)
+        if 'ooooo' in ''.join(line) or 'ooooo' in ''.join(line2):
+            isSuccess = True
+            break
+    for row in range(1, N):
+        line = list()
+        makeLine(row, 0)
+        line2 = list()
+        makeLine2(row, N-1)
+        if 'ooooo' in ''.join(line) or 'ooooo' in ''.join(line2):
+            isSuccess = True
+            break
+    if isSuccess:
+        print(f"#{tc} YES")
+    else:
+        print(f'#{tc} NO')
+
+# 리팩토링
+T = int(input())
+for tc in range(1, T + 1):
+    N = int(input())
+    board = [input().strip() for _ in range(N)]
+
+    dirs = [(0, 1), (1, 0), (1, 1), (1, -1)]
+
+    def has_five():
+        for x in range(N):
+            for y in range(N):
+                if board[x][y] != 'o':
+                    continue
+                for dx, dy in dirs:
+                    cnt = 1
+                    nx, ny = x + dx, y + dy
+                    while 0 <= nx < N and 0 <= ny < N and board[nx][ny] == 'o':
+                        cnt += 1
+                        if cnt == 5:
+                            return True
+                        nx += dx
+                        ny += dy
+
+        return False
+
+    print(f"#{tc} {'YES' if has_five() else 'NO'}")
+
+
+# 3431. 준환이의 운동관리
+T = int(input())
+for tc in range(1, T+1):
+    L, U, X = map(int, input().split())
+    if L <= X <= U:
+        print(f'#{tc} 0')
+    elif X > U:
+        print(f'#{tc} {-1}')
+    else:
+        print(f'#{tc} {L-X}')
+
+
+# 3499. 퍼펙트 셔플
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    nList = list(input().split())
+    divideNum = (N//2) if (N%2) == 0 else (N//2)+1
+    divideList = [nList[0:divideNum], nList[divideNum:]]
+
+    print(f'#{tc} ', end='')
+    for i in range(N//2):
+        print(divideList[0][i], divideList[1][i], end=' ')
+    if (N%2) != 0:
+        print(divideList[0][-1])
+    else:
+        print()
+
+
+# 3307. 최장 증가 부분 수열
+def solve_maxLength():
+    global maxLength
+
+    def dfs(idx, length):
+        global maxLength
+        if idx >= N:
+            maxLength = max(maxLength, length)
+            return
+        elif resultList[-1] <= nList[idx]:
+            resultList.append(nList[idx])
+            dfs(idx+1, length+1)
+            resultList.pop(-1)
+        dfs(idx + 1, length)
+        return
+    resultList = list()
+    resultList.append(0)
+    dfs(0, 0)
+
+T = int(input())
+for tc in range(1,T+1):
+    N = int(input())
+    nList = list(map(int, input().split()))
+    maxLength = 0
+    solve_maxLength()
+    print(f'#{tc} {maxLength}')
+# dp
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    nList = list(map(int, input().split()))
+
+    dp = [1] * N
+
+    for i in range(N):
+        for j in range(i):
+            if nList[j] <= nList[i] and dp[j] + 1 > dp[i]:
+                dp[i] = dp[j] + 1
+
+    maxLength = max(dp)
+    print(f'#{tc} {maxLength}')
+
+
+
+
