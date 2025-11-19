@@ -880,5 +880,38 @@ for tc in range(1, T+1):
     print(f'#{tc} {maxLength}')
 
 
+# 13218. 조별과제
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    print(f"#{tc} {N//3}")
 
 
+# 1493. 수의 새로운 연산
+def num_to_coord(p):
+    d = 1
+    tri = 1
+    while tri < p:
+        d += 1
+        tri += d
+
+    y = tri - p + 1
+    x = d - y + 1
+    return (x, y)
+
+def coord_to_num(x: int, y: int) -> int:
+    d = x + y - 1
+    tri = d * (d + 1) // 2
+    return tri - (y - 1)
+
+T = int(input().strip())
+for tc in range(1, T + 1):
+    p, q = map(int, input().split())
+
+    x1, y1 = num_to_coord(p)
+    x2, y2 = num_to_coord(q)
+
+    x3, y3 = x1 + x2, y1 + y2
+    ans = coord_to_num(x3, y3)
+
+    print(f"#{tc} {ans}")
