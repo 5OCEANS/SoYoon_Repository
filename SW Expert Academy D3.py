@@ -915,3 +915,80 @@ for tc in range(1, T + 1):
     ans = coord_to_num(x3, y3)
 
     print(f"#{tc} {ans}")
+
+
+# 5356. 의석이의 세로로 말해요
+T = int(input())
+for tc in range(1,T+1):
+    alList = list()
+    maxLineLength = 0
+    resultList = list()
+    for i in range(5):
+        line = list(input())
+        maxLineLength = max(maxLineLength, len(line))
+        alList.append(line)
+    for j in range(5):
+        if len(alList[j]) < maxLineLength:
+            for _ in range(maxLineLength-len(alList[j])):
+                alList[j].append('')
+    alList = list(zip(*alList))
+    print(f'#{tc} ', end='')
+    for i in range(len(alList)):
+        print(''.join(alList[i]), end='')
+    print()
+
+
+# 4837. [파이썬 S/W 문제해결 기본] 2일차 - 부분집합의 합
+def solve():
+    global result
+
+    def dfs(idx, length):
+        global result
+        if length == N:
+            if sum(sumList) == K:
+                result += 1
+            return
+        if idx+1 < 12:
+            sumList.append(numList[idx+1])
+            dfs(idx+1, length+1)
+            sumList.pop(-1)
+            dfs(idx+1, length)
+        return
+
+    sumList=[]
+    dfs(-1, 0)
+
+T = int(input())
+for tc in range(1,T+1):
+    N, K = map(int, input().split())
+    numList = [num for num in range(1, 13)]
+    result = 0
+    solve()
+    print(f'#{tc} {result}')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
