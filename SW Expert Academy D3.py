@@ -967,28 +967,372 @@ for tc in range(1,T+1):
     print(f'#{tc} {result}')
 
 
+# 6190. 정곤이의 단조 증가하는 수
+def chk(N):
+    strN = str(N)
+    maxN = strN[0]
+
+    for i in range(1, len(strN)):
+        if maxN <= strN[i]:
+            maxN = strN[i]
+        else:
+            return False
+    return True
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    nList = list(map(int, input().split()))
+    maxResult = -1
+
+    for i in range(N):
+        for j in range(i+1, N):
+            if chk(nList[i]*nList[j]):
+                maxResult = max((nList[i]*nList[j]), maxResult)
+    print(f"#{tc} {maxResult}")
 
 
+# 9280. 진용이네 주차타워
+from collections import deque
+
+T = int(input())
+for tc in range(1, T + 1):
+    n, m = map(int, input().split())
+    rList = [int(input()) for _ in range(n)]
+    wList = [int(input()) for _ in range(m)]
+    carList = [int(input()) for _ in range(2 * m)]
+
+    currentCar = [0] * n
+    waiting = deque()
+    result = 0
+
+    for num in carList:
+        if num > 0:
+            car = num
+            idx = -1
+            for i in range(n):
+                if currentCar[i] == 0:
+                    idx = i
+                    break
+
+            if idx == -1:
+                waiting.append(car)
+            else:
+                currentCar[idx] = car
+                result += wList[car - 1] * rList[idx]
+
+        else:
+            car = -num
+
+            idx = -1
+            for i in range(n):
+                if currentCar[i] == car:
+                    idx = i
+                    break
+
+            currentCar[idx] = 0
+            if waiting:
+                next_car = waiting.popleft()
+                currentCar[idx] = next_car
+                result += wList[next_car - 1] * rList[idx]
+
+    print(f"#{tc} {result}")
 
 
+# 5431. 민석이의 과제 체크하기
+T = int(input())
+for tc in range(1,T+1):
+    N, K = map(int, input().split())
+    kList = list(map(int, input().split()))
+    print(f"#{tc} ", end='')
+    for num in range(1, N+1):
+        if num not in kList:
+            print(num, end=' ')
+    print()
 
 
+# 5789. 현주의 상자 바꾸기
+T = int(input())
+for tc in range(1, T+1):
+    N, Q = map(int, input().split())
+    nList = [0] * N
+    for i in range(1, Q+1):
+        l, r = map(int, input().split())
+        for j in range(l-1, r):
+            nList[j] = i
+    print(f'#{tc}', ' '.join(map(str, nList)))
 
 
+# 4843. [파이썬 S/W 문제해결 기본] 2일차 - 특별한 정렬
+T = int(input())
+for tc in range(1,T+1):
+    N = int(input())
+    nList = list(map(int, input().split()))
+    nList.sort()
+    firNList = nList[:N//2]
+    secNList = sorted(nList[N//2:], reverse=True)
+    print(f"#{tc}", end=' ')
+    for i in range(10):
+        if i % 2 == 0:
+            print(secNList.pop(0), end=' ')
+        else:
+            print(firNList.pop(0), end=' ')
+    print()
 
 
+# 10726. 이진수 표현
+TC = int(input())
+for tc in range(1,TC+1):
+    N, M = map(int, input().split())
+    binM = bin(M)[2:][::-1]
+    if binM[:N] == '1'*N:
+        print(f"#{tc} ON")
+    else:
+        print(f"#{tc} OFF")
 
 
+# 12368. 24시간
+T = int(input())
+for tc in range(1,T+1):
+    A, B = map(int, input().split())
+    print(f"#{tc} {(A+B) % 24}")
 
 
+# 4047. 영준이의 카드 카운팅
+T = int(input())
+for tc in range(1,T+1):
+    S = input().strip()
+    s = [num for num in range(1, 14)]
+    d = [num for num in range(1, 14)]
+    h = [num for num in range(1, 14)]
+    c = [num for num in range(1, 14)]
+    for card in range(0, len(S), 3):
+        isSuccess = True
+        kind = S[card]
+        cardNum = int(S[card+1:card+3])
+        if kind == 'S':
+            if cardNum not in s:
+                isSuccess = False
+                break
+            else:
+                s.remove(cardNum)
+        elif kind == 'D':
+            if cardNum not in d:
+                isSuccess = False
+                break
+            else:
+                d.remove(cardNum)
+        elif kind == 'H':
+            if cardNum not in h:
+                isSuccess = False
+                break
+            else:
+                h.remove(cardNum)
+        elif kind == 'C':
+            if cardNum not in c:
+                isSuccess = False
+                break
+            else:
+                c.remove(cardNum)
+    if not isSuccess:
+        print(f"#{tc} ERROR")
+    else:
+        print(f"#{tc} {len(s)} {len(d)} {len(h)} {len(c)}")
+# 리팩토링
+T = int(input())
+for tc in range(1, T + 1):
+    S = input().strip()
+
+    remain = {
+        'S': [i for i in range(1, 14)],
+        'D': [i for i in range(1, 14)],
+        'H': [i for i in range(1, 14)],
+        'C': [i for i in range(1, 14)],
+    }
+
+    is_success = True
+
+    for i in range(0, len(S), 3):
+        kind = S[i]
+        num = int(S[i+1:i+3])
+        if num not in remain[kind]:
+            is_success = False
+            break
+        remain[kind].remove(num)
+
+    if not is_success:
+        print(f"#{tc} ERROR")
+    else:
+        print(f"#{tc} {len(remain['S'])} {len(remain['D'])} {len(remain['H'])} {len(remain['C'])}")
 
 
+# 1229. [S/W 문제해결 기본] 8일차 - 암호문2
+for tc in range(1, 11):
+    N = int(input())
+    string = list(map(int, input().split()))
+    cmdCount = int(input())
+    cmdList = list(input().split())
+    i = 0
+    while i < len(cmdList):
+        if cmdList[i] == 'I':
+            x = int(cmdList[i+1])
+            y = int(cmdList[i+2])
+            sList = cmdList[i+3:i+3+y]
+            string = string[:x] + sList + string[x:]
+            i += 3+y
+
+        elif cmdList[i] == 'D':
+            string = string[:int(cmdList[i+1])] + string[int(cmdList[i+1])+int(cmdList[i+2]):]
+            i += 3
+    print(f"#{tc}", end=' ')
+    print(' '.join(map(str, string[:10])))
 
 
+# 5188. [파이썬 S/W 문제해결 구현] 2일차 - 최소합
+def solve():
+    global minResult
+    def dfs(x, y, totalScore):
+        global minResult
+        if x == N-1 and y == N-1:
+            minResult = min(minResult, totalScore)
+            return
+        nx, ny = x+dirs[0][0], y+dirs[0][1]
+        if 0 <= nx < N and 0 <= ny < N:
+            dfs(nx, ny, totalScore+nList[nx][ny])
+        nx, ny = x + dirs[1][0], y + dirs[1][1]
+        if 0 <= nx < N and 0 <= ny < N:
+            dfs(nx, ny, totalScore + nList[nx][ny])
+        return
+    dfs(0,0,nList[0][0])
+
+T = int(input())
+for tc in range(1,T+1):
+    N = int(input())
+    nList = [list(map(int, input().split())) for _ in range(N)]
+    minResult = 1000000000000000000
+    dirs = [(0, 1), (1, 0)]
+    solve()
+    print(f"#{tc} {minResult}")
 
 
+# 3282. 0/1 Knapsack
+# DFS
+def solve():
+    global maxValue
+
+    def dfs(idx, totalValue, totalSpace):
+        global maxValue
+        if totalSpace <= K:
+            maxValue = max(totalValue, maxValue)
+        else:
+            return
+        if 0 <= idx+1 < N and 0 <= idx+1 < N:
+            dfs(idx+1, totalValue+nList[idx+1][1], totalSpace+nList[idx+1][0])
+            dfs(idx+1, totalValue, totalSpace)
+        return
+    dfs(-1, 0, 0)
+
+T = int(input())
+for tc in range(1, T+1):
+    N, K = map(int, input().split())
+    nList = list()
+    for i in range(N):
+        v, c = map(int, input().split())
+        nList.append((v, c))
+    maxValue = 0
+    solve()
+    print(f"#{tc} {maxValue}")
+# DP
+T = int(input())
+for tc in range(1, T+1):
+    N, K = map(int, input().split())
+    items = []
+    for _ in range(N):
+        space, value = map(int, input().split())
+        items.append((space, value))
+    dp = [0] * (K+1)
+
+    for space, value in items:
+        for cap in range(K, space-1, -1):
+            dp[cap] = max(dp[cap], dp[cap-space]+value)
+    maxValue = dp[K]
+    print(f'#{tc} {maxValue}')
 
 
+# 4406. 모음이 보이지 않는 사람
+T = int(input())
+for tc in range(1, T+1):
+    string = input().strip()
+    string = string.replace('a', '').replace('e', '').replace('i', '').replace('o', '').replace('u', '')
+    print(f"#{tc} {string}")
 
 
+# 5105. [파이썬 S/W 문제해결 기본] 6일차 - 미로의 거리
+# DFS
+def solve():
+    global result
+    def dfs(x, y, totalSpace):
+        global result
+        if board[x][y] == '2':
+            result = min(totalSpace-1, result)
+            return
+        for r, c in dirs:
+            nx, ny = x+r, y+c
+            if 0 <= nx < N and 0 <= ny < N:
+                if board[nx][ny] != '1' and visited[nx][ny] == False:
+                    visited[nx][ny] = True
+                    dfs(nx, ny, totalSpace+1)
+                    visited[nx][ny] = False
+    visited[sx][sy] = True
+    dfs(sx, sy, 0)
 
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    board = []
+    sx, sy = 0, 0
+    for i in range(N):
+        line = list(input())
+        if '3' in line:
+            sx, sy = i, line.index('3')
+        board.append(line)
+    dirs = [(0, 1), (0, -1), (-1, 0), (1, 0)]
+    visited = [[False] * N for _ in range(N)]
+    result = 10**9
+    solve()
+    print(f"#{tc} {0 if result == 10**9 else result}")
+# BFS
+from collections import deque
+
+T = int(input())
+for tc in range(1, T+1):
+    N = int(input())
+    board = []
+    sx = sy = 0
+
+    for i in range(N):
+        line = list(input().strip())
+        for j in range(N):
+            if line[j] == '3':
+                sx, sy = i, j
+        board.append(line)
+    visited = [[False]*N for _ in range(N)]
+
+    queue = deque()
+    queue.append((sx,sy,0))
+    visited[sx][sy] = True
+    dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    result = 0
+
+    while queue:
+        x, y, dist = queue.popleft()
+        if board[x][y] == '2':
+            result = dist-1
+            break
+        for dx, dy in dirs:
+            nx, ny = x+dx, y+dy
+            if 0 <= nx < N and 0 <= ny < N:
+                if not visited[nx][ny] and board[nx][ny] != '1':
+                    visited[ny][ny] = True
+                    queue.append((nx, ny, dist+1))
+    print(f"#{tc} {result}")
